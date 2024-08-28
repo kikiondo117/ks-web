@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUBSCRIBER
+  INSTRUCTOR
+  ADMIN
+}
+
+model User {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  email             String   @unique
+  password          String
+  picture           String?  @default("/avatar.png")
+  roles             Role[]
+  stripe_account_id String?
+  stripe_seller     String?
+  stripe_session    String?
+  createdAt         DateTime @default(now()) // Agrega un campo de fecha y hora para la creación
+  updatedAt         DateTime @updatedAt // Agrega un campo de fecha y hora que se actualiza automáticamente
+}
