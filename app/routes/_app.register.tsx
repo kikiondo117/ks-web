@@ -6,6 +6,7 @@ import {
 } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
 import { useFormik } from "formik";
+import { commitSession, getSession } from "~/session";
 import { hasPassword } from "~/utils/auth";
 import { db } from "~/utils/db";
 
@@ -25,7 +26,7 @@ export const action: ActionFunction = async ({
 
   console.log("data", data);
 
-  const userExist = await db.user.findFirst({ where: { email: data.email } });
+  const userExist = await db.user.findUnique({ where: { email: data.email } });
   if (userExist) return json({ ok: false, error: "Email is already register" });
 
   const hashedPassword = await hasPassword(data.password);
@@ -40,9 +41,21 @@ export const action: ActionFunction = async ({
     data: user,
   });
 
-  console.log("registered user", newUser);
+  if (!newUser) {
+    return { ok: false, error: "Error register user" };
+  }
 
-  throw redirect("/");
+  const session = await getSession();
+  session.set("userId", newUser.id); // Almacenamos el ID del usuario en la session
+
+  // throw redirect("/");
+  // return json("hola c:");
+
+  return redirect("/dashboard", {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 };
 
 export default function Register() {
@@ -57,7 +70,11 @@ export default function Register() {
 
       fetcher.submit(formData, { method: "post" });
     },
-    validate: (values: any) => {
+    validate: (values: {
+      username: string;
+      email: string;
+      password: string;
+    }) => {
       const result = registrationSchema.safeParse(values);
 
       if (result.success) return;
@@ -80,40 +97,51 @@ export default function Register() {
         className="max-w-screen-sm flex flex-col gap-4"
       >
         {/* <Form method="post" className="max-w-screen-sm flex flex-col gap-4"> */}
-        <div>
+        <div className="flex flex-col gap-4">
           <label htmlFor="username">Username</label>
           <input
             type="text"
             id="username"
             name="username"
-            className="max-w-xs"
+            className="max-w-xs border px-4 py-2 rounded focus:border-blue-500"
             value={formik.values.username}
             onChange={formik.handleChange}
           />
           {formik.errors.username && <span>{formik.errors.username}</span>}
         </div>
 
-        {/* <Input
-          name="email"
-          type="email"
-          label="Email"
-          className="max-w-xs"
-          value={formik.values.email}
-          isInvalid={!!formik.errors.email}
-          errorMessage={formik.errors.email}
-          onChange={formik.handleChange}
-        />
-        <Input
-          name="password"
-          type="password"
-          label="Password"
-          className="max-w-xs"
-          value={formik.values.password}
-          isInvalid={!!formik.errors.password}
-          errorMessage={formik.errors.password}
-          onChange={formik.handleChange}
-        /> */}
-        <button type="submit">Registrarme</button>
+        <div className="flex flex-col gap-4">
+          <label htmlFor="email">Email</label>
+          <input
+            type="text"
+            id="email"
+            name="email"
+            className="max-w-xs border px-4 py-2 rounded focus:border-blue-500"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+          />
+          {formik.errors.email && <span>{formik.errors.email}</span>}
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <label htmlFor="password">Password</label>
+          <input
+            type="text"
+            id="password"
+            name="password"
+            className="max-w-xs border px-4 py-2 rounded focus:border-blue-500"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+          />
+          {formik.errors.password && <span>{formik.errors.password}</span>}
+        </div>
+
+        <button
+          type="submit"
+          className="border px-4 py-2 bg-blue-500 text-white focus:border-red-500 focus:text-red-100"
+        >
+          Registrarme
+        </button>
         {/* </Form> */}
       </form>
     </div>

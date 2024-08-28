@@ -1,10 +1,30 @@
-import type { MetaFunction } from "@remix-run/node";
+import {
+  redirect,
+  type LoaderFunction,
+  type LoaderFunctionArgs,
+  type MetaFunction,
+} from "@remix-run/node";
+import { getSession } from "~/session";
 
 export const meta: MetaFunction = () => {
   return [
     { title: "New Remix App" },
     { name: "description", content: "Welcome to Remix!" },
   ];
+};
+
+export const loader: LoaderFunction = async ({
+  request,
+}: LoaderFunctionArgs) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  // Verificamos que la cookie tenga datos validos
+  const userId = session.get("userId");
+
+  if (userId) {
+    return redirect("/dashboard");
+  }
+
+  return null;
 };
 
 export default function Index() {
