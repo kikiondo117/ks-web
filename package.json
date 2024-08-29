@@ -20,7 +20,8 @@
     "isbot": "^4.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-grid-system": "^8.2.0"
+    "react-grid-system": "^8.2.0",
+    "react-toastify": "^10.0.5"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.11.2",

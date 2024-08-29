@@ -1,19 +1,13 @@
-import { Link, Outlet } from "@remix-run/react";
+import { Outlet } from "@remix-run/react";
+import { ToastContainer } from "react-toastify";
+import { Navbar } from "~/components/organims";
 
 export default function App() {
   return (
-    <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/register">Register</Link>
-          </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-        </ul>
-      </nav>
-      <div className="container mx-auto my-16">
+    <div className="p-4">
+      <Navbar></Navbar>
+      <div className="container mx-auto my-8">
+        <ToastContainer position="top-center" />
         <Outlet></Outlet>
       </div>
     </div>

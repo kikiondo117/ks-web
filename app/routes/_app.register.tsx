@@ -4,7 +4,7 @@ import {
   json,
   redirect,
 } from "@remix-run/node";
-import { useFetcher } from "@remix-run/react";
+import { Link, useFetcher } from "@remix-run/react";
 import { useFormik } from "formik";
 import { commitSession, getSession } from "~/session";
 import { hasPassword } from "~/utils/auth";
@@ -89,14 +89,18 @@ export default function Register() {
     },
   });
 
+  console.log("formik.isSubmitting", formik.isSubmitting);
+
   return (
-    <div className="max-w-xs mx-auto p-4 ">
-      <h1 className="text-3xl text-center my-4">¡Registrate!</h1>
+    <div className="max-w-xs mx-auto p-4 flex flex-col gap-8">
+      <h1 className="text-3xl text-center">¡Registrate!</h1>
+
       <form
         onSubmit={formik.handleSubmit}
         className="max-w-screen-sm flex flex-col gap-4"
       >
         {/* <Form method="post" className="max-w-screen-sm flex flex-col gap-4"> */}
+
         <div className="flex flex-col gap-4">
           <label htmlFor="username">Username</label>
           <input
@@ -137,13 +141,21 @@ export default function Register() {
         </div>
 
         <button
+          disabled={formik.isSubmitting}
           type="submit"
           className="border px-4 py-2 bg-blue-500 text-white focus:border-red-500 focus:text-red-100"
         >
-          Registrarme
+          {formik.isSubmitting ? "Enviando..." : "Registrarme"}
         </button>
         {/* </Form> */}
       </form>
+
+      <span className="flex justify-center gap-2">
+        Ya estás registrado?
+        <Link to="/login" className="text-blue-500">
+          Login
+        </Link>
+      </span>
     </div>
   );
 }
