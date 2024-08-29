@@ -11,3 +11,8 @@ export const registrationSchema = z.object({
 });
 
 export type TRegistration = z.infer<typeof registrationSchema>;
+
+export const loginSchema = z.object({
+  email: z.string().email({ message: "Ingresa un correo valido" }),
+  password: z.string(),
+});
