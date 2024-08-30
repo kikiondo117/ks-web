@@ -1,14 +1,18 @@
-import { ActionFunction, ActionFunctionArgs } from "@remix-run/node";
-import { json, Link, redirect, useFetcher } from "@remix-run/react";
+import { ActionFunctionArgs, json } from "@remix-run/node";
+import {
+  Link,
+  redirect,
+  useActionData,
+  useFetcher,
+  useNavigation,
+} from "@remix-run/react";
 import { useFormik } from "formik";
 import { commitSession, getSession } from "~/session";
 import { comparePassword } from "~/utils/auth";
 import { db } from "~/utils/db";
 import { loginSchema } from "~/utils/zod";
 
-export const action: ActionFunction = async ({
-  request,
-}: ActionFunctionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const data = Object.fromEntries(formData) as Record<string, string>;
 
@@ -26,10 +30,10 @@ export const action: ActionFunction = async ({
   const match = await comparePassword(data.password, userExist.password);
 
   if (!match) {
-    return {
+    return json({
       ok: false,
       error: "Invalid data, pls check the email and password",
-    };
+    });
   }
 
   // Creamos una nueva session
@@ -44,7 +48,9 @@ export const action: ActionFunction = async ({
 };
 
 export default function Login() {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<typeof action>();
+  const navigation = useNavigation();
+
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     onSubmit: (values) => {
@@ -53,7 +59,7 @@ export default function Login() {
         formData.append(key, value);
       });
 
-      fetcher.submit(formData, { method: "post" });
+      fetcher.submit(formData, { method: "post", action: "/login" });
     },
     validate: (values: { email: string; password: string }) => {
       const result = loginSchema.safeParse(values);
@@ -104,12 +110,18 @@ export default function Login() {
           {formik.errors.password && <span>{formik.errors.password}</span>}
         </div>
 
+        {fetcher && fetcher.data?.ok === false && (
+          <div className="text-red-500">
+            Usuario o contraseña incorrectos, por favor revisa los datos.
+          </div>
+        )}
+
         <button
-          disabled={formik.isSubmitting}
+          disabled={navigation.state === "submitting"}
           type="submit"
           className="border px-4 py-2 bg-blue-500 text-white focus:border-red-500 focus:text-red-100"
         >
-          {formik.isSubmitting ? "Enviando..." : "Registrarme"}
+          {navigation.state === "submitting" ? "Enviando..." : "Registrarme"}
         </button>
       </form>
 
