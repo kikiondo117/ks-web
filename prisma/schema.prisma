@@ -31,4 +31,5 @@ model User {
   stripe_session    String?
   createdAt         DateTime @default(now()) // Agrega un campo de fecha y hora para la creación
   updatedAt         DateTime @updatedAt // Agrega un campo de fecha y hora que se actualiza automáticamente
+  passwordResetCode String?
 }

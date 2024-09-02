@@ -16,3 +16,7 @@ export const loginSchema = z.object({
   email: z.string().email({ message: "Ingresa un correo valido" }),
   password: z.string(),
 });
+
+export const forgotSchema = z.object({
+  email: z.string().email({ message: "Ingresa un correo valido" }),
+});

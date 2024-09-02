@@ -1,11 +1,5 @@
 import { ActionFunctionArgs, json } from "@remix-run/node";
-import {
-  Link,
-  redirect,
-  useActionData,
-  useFetcher,
-  useNavigation,
-} from "@remix-run/react";
+import { Link, redirect, useFetcher, useNavigation } from "@remix-run/react";
 import { useFormik } from "formik";
 import { commitSession, getSession } from "~/session";
 import { comparePassword } from "~/utils/auth";
@@ -129,6 +123,13 @@ export default function Login() {
         No estás registrado?
         <Link to="/register" className="text-blue-500">
           Register
+        </Link>
+      </span>
+
+      <span className="flex justify-center gap-2">
+        Olvidates tu password?
+        <Link to="/forgot-password?form=form1" className="text-red-700">
+          Olvide mi password
         </Link>
       </span>
     </div>
