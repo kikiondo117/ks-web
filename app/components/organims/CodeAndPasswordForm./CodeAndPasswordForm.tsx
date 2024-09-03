@@ -15,7 +15,7 @@ export function CodeAndPasswordForm() {
         formData.append(key, value);
       });
 
-      fetcher.submit(formData, { method: "post", action: "/forgot-password" });
+      fetcher.submit(formData, { method: "post" });
     },
     validate: (values) => {
       const validation = codeSchema.safeParse(values);

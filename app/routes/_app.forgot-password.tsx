@@ -87,6 +87,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
     case "code": {
       const validateCode = codeSchema.safeParse(data);
+      const url = new URL(request.url);
+      const email = url.searchParams.get("email");
+
+      console.log("email", email);
 
       if (!validateCode.success)
         return json({ ok: false, error: validateCode.error });
