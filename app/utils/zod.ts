@@ -20,3 +20,7 @@ export const loginSchema = z.object({
 export const forgotSchema = z.object({
   email: z.string().email({ message: "Ingresa un correo valido" }),
 });
+
+export const emailCodeSchema = z.object({
+  code: z.string().min(5, { message: "Ingresa un codigo valido" }),
+});
