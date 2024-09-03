@@ -17,10 +17,13 @@ export const loginSchema = z.object({
   password: z.string(),
 });
 
-export const forgotSchema = z.object({
+export const emailSchema = z.object({
   email: z.string().email({ message: "Ingresa un correo valido" }),
 });
 
-export const emailCodeSchema = z.object({
+export const codeSchema = z.object({
   code: z.string().min(5, { message: "Ingresa un codigo valido" }),
+  password: z
+    .string()
+    .min(5, { message: "Ingresa una password de al menos 5 characteres" }),
 });
