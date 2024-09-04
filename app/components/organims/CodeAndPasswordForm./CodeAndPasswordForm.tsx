@@ -1,11 +1,11 @@
-import { useNavigation } from "@remix-run/react";
+import { Link } from "@remix-run/react";
 import { useFormik } from "formik";
 import { useFetcher } from "react-router-dom";
 import { codeSchema } from "~/utils/zod";
 
 export function CodeAndPasswordForm() {
   const fetcher = useFetcher();
-  const navigation = useNavigation();
+
   const formik = useFormik({
     initialValues: { code: "", formType: "code", password: "" },
     onSubmit: (values) => {
@@ -69,20 +69,25 @@ export function CodeAndPasswordForm() {
           value={formik.values.password}
           onChange={formik.handleChange}
         />
-        {formik.errors.code && (
+        {formik.errors.password && (
           <span className="text-red-500">{formik.errors.password}</span>
         )}
       </div>
 
       <button
-        disabled={navigation.state === "submitting"}
+        disabled={fetcher.state === "submitting"}
         type="submit"
         className="border px-4 py-2 bg-blue-500 text-white focus:border-red-500 focus:text-red-100"
       >
-        {navigation.state === "submitting"
-          ? "Enviando..."
-          : "Enviame mi codigo"}
+        {fetcher.state === "submitting" ? "Enviando..." : "Enviame mi codigo"}
       </button>
+
+      <p>
+        Problemas con el codigo? solicita uno nuevo{" "}
+        <Link to="/forgot-password?form=emailForm" className="text-blue-500">
+          regresar
+        </Link>
+      </p>
     </form>
   );
 }
