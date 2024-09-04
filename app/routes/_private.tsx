@@ -1,3 +1,4 @@
+import { $Enums } from "@prisma/client";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { Outlet, redirect, useLoaderData } from "@remix-run/react";
 import { PrivateNavbar } from "~/components/organims";
@@ -18,11 +19,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function Private() {
   const data = useLoaderData<typeof loader>();
+  const roles = data.user?.roles;
 
   return (
     <div className="p-4">
       <header>
-        <PrivateNavbar></PrivateNavbar>
+        <PrivateNavbar roles={roles}></PrivateNavbar>
       </header>
       <div className="container mx-auto my-8">
         <Outlet context={data} />

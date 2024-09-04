@@ -1,7 +1,11 @@
+import { $Enums } from "@prisma/client";
 import { Form, NavLink } from "@remix-run/react";
-import { destroySession } from "~/session";
 
-export function PrivateNavbar() {
+type props = {
+  roles: $Enums.Role[] | undefined;
+};
+
+export function PrivateNavbar(props: props) {
   return (
     <nav>
       <ul className="flex justify-end gap-4">
@@ -15,16 +19,33 @@ export function PrivateNavbar() {
             Blogs
           </NavLink>
         </li>
-        <li>
-          <NavLink
-            to="/courses"
-            className={({ isActive }) =>
-              !isActive ? "text-black" : "text-fuchsia-700"
-            }
-          >
-            Cursos
-          </NavLink>
-        </li>
+
+        {props.roles &&
+        props.roles.length &&
+        props.roles.includes("INSTRUCTOR") ? (
+          <li>
+            <NavLink
+              to="/instructor/course/create"
+              className={({ isActive }) =>
+                !isActive ? "text-black" : "text-fuchsia-700"
+              }
+            >
+              Crea un curso
+            </NavLink>
+          </li>
+        ) : (
+          <li>
+            <NavLink
+              to="/instructor/become-instructor"
+              className={({ isActive }) =>
+                !isActive ? "text-black" : "text-fuchsia-700"
+              }
+            >
+              Se un instructor
+            </NavLink>
+          </li>
+        )}
+
         <li>
           <Form method="post" action="/logout">
             <button type="submit">Cerrar Sesión</button>
