@@ -1,3 +1,3 @@
-export default function Create() {
+export default function CreateCourse() {
   return <div>Create course</div>;
 }
