@@ -22,6 +22,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     },
   });
 
+  if (!user?.roles.includes("INSTRUCTOR")) {
+    return redirect("/dashboard");
+  }
+
   return json({ user });
 };
 

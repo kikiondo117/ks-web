@@ -1,16 +1,8 @@
 import { User } from "@prisma/client";
-import { useNavigate, useOutletContext } from "@remix-run/react";
-import { useEffect } from "react";
+import { useOutletContext } from "@remix-run/react";
 
 export default function Instructor() {
   const { user }: { user: User } = useOutletContext();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user.roles.includes("INSTRUCTOR")) {
-      navigate("/dashboard");
-    }
-  }, []);
 
   return (
     <div>
