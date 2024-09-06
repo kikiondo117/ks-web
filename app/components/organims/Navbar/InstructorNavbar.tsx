@@ -5,9 +5,18 @@ type props = {
   roles: $Enums.Role[] | undefined;
 };
 
-export function PrivateNavbar(props: props) {
+export function InstructorNavbar(props: props) {
   return (
-    <nav>
+    <nav className="flex justify-between">
+      <NavLink
+        to="/dashboard"
+        className={({ isActive }) =>
+          !isActive ? "text-black" : "text-fuchsia-700"
+        }
+      >
+        KS - WEB
+      </NavLink>
+
       <ul className="flex justify-end gap-4">
         <li>
           <NavLink
@@ -25,12 +34,12 @@ export function PrivateNavbar(props: props) {
         props.roles.includes("INSTRUCTOR") ? (
           <li>
             <NavLink
-              to="/instructor/"
+              to="/instructor/course/create"
               className={({ isActive }) =>
                 !isActive ? "text-black" : "text-fuchsia-700"
               }
             >
-              Instructor
+              Crea un curso
             </NavLink>
           </li>
         ) : (

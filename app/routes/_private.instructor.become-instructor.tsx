@@ -48,6 +48,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         return redirect(
           `${accountLink.url}?${queryString.stringify(accountLink)}`
         );
+      } else {
+        return redirect("/stripe/callback");
       }
     } catch (error) {
       return json({ ok: false, error: error }, { status: 500 });

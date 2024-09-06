@@ -1,7 +1,7 @@
-import { $Enums } from "@prisma/client";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { Outlet, redirect, useLoaderData } from "@remix-run/react";
-import { PrivateNavbar } from "~/components/organims";
+import { InstructorNavbar } from "~/components/organims";
+
 import { getSession } from "~/session";
 import { db } from "~/utils/db";
 
@@ -32,7 +32,7 @@ export default function Private() {
   return (
     <div className="p-4">
       <header>
-        <PrivateNavbar roles={roles}></PrivateNavbar>
+        <InstructorNavbar roles={roles}></InstructorNavbar>
       </header>
       <div className="container mx-auto my-8">
         <Outlet context={data} />

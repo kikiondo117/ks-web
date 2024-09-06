@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, json } from "@remix-run/node";
-import { Link, redirect, useFetcher, useNavigation } from "@remix-run/react";
+import { Link, redirect, useFetcher } from "@remix-run/react";
 import { useFormik } from "formik";
 import { commitSession, getSession } from "~/session";
 import { comparePassword } from "~/utils/auth";
@@ -43,7 +43,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Login() {
   const fetcher = useFetcher<typeof action>();
-  const navigation = useNavigation();
 
   const formik = useFormik({
     initialValues: { email: "", password: "" },
@@ -111,11 +110,11 @@ export default function Login() {
         )}
 
         <button
-          disabled={navigation.state === "submitting"}
+          disabled={fetcher.state === "submitting"}
           type="submit"
           className="border px-4 py-2 bg-blue-500 text-white focus:border-red-500 focus:text-red-100"
         >
-          {navigation.state === "submitting" ? "Enviando..." : "Registrarme"}
+          {fetcher.state === "submitting" ? "Enviando..." : "Registrarme"}
         </button>
       </form>
 
